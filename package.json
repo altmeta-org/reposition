@@ -1,11 +1,11 @@
 {
-  "name": "rational-ordering",
+  "name": "reposition",
   "version": "1.0.0",
-  "description": "Computes sparse positions to maintain list ordering with (hopefully) minimal position edits during insert operations.",
+  "description": "Library for calculation of efficient position values of user reordered lists",
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
   "module": "build/module/index.js",
-  "repository": "https://github.com/zandaleph/rational-ordering",
+  "repository": "https://github.com/altmeta-org/reposition",
   "license": "MIT",
   "keywords": [],
   "scripts": {

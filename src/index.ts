@@ -6,9 +6,9 @@ https://github.com/zandaleph/rational-index/blob/main/LICENSE */
  * The main export of this library - [[Inserter]].
  */
 export {
-  Inserter,
-  StartIndex,
-  EndIndex,
+  Positioner,
+  PrevPosition,
+  NextPosition,
   LIST_HEAD,
   LIST_TAIL,
-} from './lib/inserter';
+} from './lib/positioner';

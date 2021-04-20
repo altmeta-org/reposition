@@ -4,10 +4,10 @@ https://github.com/zandaleph/rational-index/blob/main/LICENSE */
 
 import test from 'ava';
 
-import { Inserter, LIST_HEAD, LIST_TAIL } from './inserter';
+import { LIST_HEAD, LIST_TAIL, Positioner } from './positioner';
 
 test('insert10', (t) => {
-  const inserter = new Inserter('0123456789');
+  const inserter = new Positioner('0123456789');
   t.deepEqual(inserter.insert(LIST_HEAD, LIST_TAIL), ['5']);
   t.deepEqual(inserter.insert(LIST_HEAD, LIST_TAIL, 2), ['3', '7']);
   t.deepEqual(inserter.insert(LIST_HEAD, LIST_TAIL, 3), ['25', '5', '75']);
@@ -35,7 +35,7 @@ test('insert10', (t) => {
 });
 
 test('insert16', (t) => {
-  const inserter = new Inserter('0123456789ABCDEF');
+  const inserter = new Positioner('0123456789ABCDEF');
   t.deepEqual(inserter.insert(LIST_HEAD, LIST_TAIL), ['8']);
   t.deepEqual(inserter.insert(LIST_HEAD, LIST_TAIL, 2), ['5', 'B']);
   t.deepEqual(inserter.insert(LIST_HEAD, LIST_TAIL, 4), [
@@ -47,7 +47,7 @@ test('insert16', (t) => {
 });
 
 test('insert64', (t) => {
-  const inserter = new Inserter();
+  const inserter = new Positioner();
   t.deepEqual(inserter.insert('ABC', 'abc'), ['N']);
   t.deepEqual(inserter.insert('aba', 'abc'), ['abb']);
   t.deepEqual(inserter.insert('aba', 'abd'), ['abbU']);

@@ -1,6 +1,6 @@
-/* Copyright 2020 The Rational Index Project Developers. See the LICENSE
+/* Copyright 2021 The Reposition Project Developers. See the LICENSE
 file at the top-level directory of this distribution and at
-https://github.com/zandaleph/rational-index/blob/main/LICENSE */
+https://github.com/altmeta-org/reposition/blob/main/LICENSE */
 
 import bigInt, { BigInteger } from 'big-integer';
 

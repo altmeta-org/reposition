@@ -1,5 +1,5 @@
 {
-  "name": "reposition",
+  "name": "@altmeta.org/reposition",
   "version": "1.0.0",
   "description": "Library for calculation of efficient position values of user reordered lists",
   "main": "build/main/index.js",

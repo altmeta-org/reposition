@@ -5,32 +5,32 @@ https://github.com/zandaleph/rational-index/blob/main/LICENSE */
 import bigInt, { BigInteger } from 'big-integer';
 
 /**
- * Value representing that no smaller indicies exist.
+ * Value representing that no smaller positions exist.
  */
 export const LIST_HEAD = 1;
 
 /**
- * Value representing that no larger indicies exist.
+ * Value representing that no larger positions exist.
  */
 export const LIST_TAIL = 2;
 
 /**
- * Represents the start of an insertion range.
+ * Represents the position of an item immediately before a new item
  */
-export type StartIndex = string | typeof LIST_HEAD;
+export type PrevPosition = string | typeof LIST_HEAD;
 
 /**
- * Represents the end of an insertion range.
+ * Represents the position of an item immediately after a new one
  */
-export type EndIndex = string | typeof LIST_TAIL;
+export type NextPosition = string | typeof LIST_TAIL;
 
 /**
- * Represents the start or end of an insertion range.
+ * Represents any position in a list
  */
-type Index = StartIndex | EndIndex;
+type Position = PrevPosition | NextPosition;
 
 /**
- * The default, pre-ordered Base64 Alphabet for indicies.
+ * The default, pre-ordered Base64 Alphabet for positions.
  *
  * This character set was chosen to be
  *
@@ -43,11 +43,11 @@ const DEFAULT_BASE64_ALPHABET =
   '-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
 /**
- * Provides utilities for creating new indicies with a given alphabet.
+ * Provides utilities for creating new positions with a given alphabet.
  */
-export class Inserter {
+export class Positioner {
   /**
-   * The allowed character set for this inserter.
+   * The allowed character set for this Positioner.
    */
   private readonly alphabet: readonly string[];
 
@@ -72,15 +72,15 @@ export class Inserter {
    *
    * Right now this is computed as `Math.round(Math.sqrt(this.base))`, as it
    * seems to provide the right tradeoff of nearly-equally sized gaps between
-   * points and shorter indicies.  However, this might change as our approach
+   * points and shorter positions.  However, this might change as our approach
    * changes, and should be considered an implementation detail.
    */
   private readonly cutoff: number;
 
   /**
-   * Creates a new Inserter with the given alphabet
+   * Creates a new Positioner with the given alphabet
    *
-   * @param {string} alphabet - the characters allowed in an index value.
+   * @param {string} alphabet - the characters allowed in an position value.
    * @throws "Invalid Alphabet" - If the given alphabet has repeats.
    */
   constructor(alphabet = DEFAULT_BASE64_ALPHABET) {
@@ -98,31 +98,33 @@ export class Inserter {
   }
 
   /**
-   * Converts an index value into an integer representation.
+   * Converts an position value into an integer representation.
    *
-   * @param {Index} index - the index to convert.
+   * @param {Position} position - the position to convert.
    * @param {number} length - the number of digits used for computation.
-   * @returns {BigInteger} the value of the index as an integer.
+   * @returns {BigInteger} the value of the position as an integer.
    */
-  private decode(index: Index, length: number): BigInteger {
-    if (index === LIST_HEAD) {
+  private decode(position: Position, length: number): BigInteger {
+    if (position === LIST_HEAD) {
       return bigInt();
-    } else if (index === LIST_TAIL) {
+    } else if (position === LIST_TAIL) {
       return bigInt(this.base).pow(length);
     } else {
       return bigInt.fromArray(
-        Array.from(index.padEnd(length, this.zero)).map((l) => this.lookup[l]),
+        Array.from(position.padEnd(length, this.zero)).map(
+          (l) => this.lookup[l]
+        ),
         this.base
       );
     }
   }
 
   /**
-   * Converts a integer representation of an index back to a string.
+   * Converts a integer representation of an position back to a string.
    *
-   * @param {BigInteger} value - The value of an index.
+   * @param {BigInteger} value - The value of an position.
    * @param {number} length - The maximum encoded representation length.
-   * @returns {string} An index string.
+   * @returns {string} An position string.
    */
   private encode(value: BigInteger, length: number): string {
     const s = value
@@ -131,30 +133,30 @@ export class Inserter {
       .join('')
       .padStart(length, this.zero);
 
-    let index = s.length;
-    for (; index > 0; --index) {
-      if (s.charAt(index - 1) !== this.zero) break;
+    let position = s.length;
+    for (; position > 0; --position) {
+      if (s.charAt(position - 1) !== this.zero) break;
     }
-    return s.substring(0, index);
+    return s.substring(0, position);
   }
 
   /**
-   * Creates `count` indicies roughly equally spaced between `start` and
+   * Creates `count` positions roughly equally spaced between `start` and
    * `end`.
    *
-   * An index is a lexicographically comparable string which represents a
+   * An position is a lexicographically comparable string which represents a
    * position within an ordered list.
    *
-   * @param {StartIndex} start - The next smallest index, or `LIST_HEAD`.
-   * @param {EndIndex} end - The next largest index, or `LIST_TAIL`.
-   * @param {number} count - The number of new indicies to create.
-   * @returns {string[]} `count` ordered indicies between `start` and `end`.
+   * @param {PrevPosition} start - The next smallest position, or `LIST_HEAD`.
+   * @param {NextPosition} end - The next largest position, or `LIST_TAIL`.
+   * @param {number} count - The number of new positions to create.
+   * @returns {string[]} `count` ordered positions between `start` and `end`.
    */
-  insert(start: StartIndex, end: EndIndex, count = 1): readonly string[] {
+  insert(start: PrevPosition, end: NextPosition, count = 1): readonly string[] {
     const start_len = start === LIST_HEAD ? 0 : start.length;
     const end_len = end === LIST_TAIL ? 0 : end.length;
 
-    // If we are creating a lot of indicies, we will need more digits of
+    // If we are creating a lot of positions, we will need more digits of
     // precision to avoid creating duplicate values.
     const workspace_len =
       Math.round(Math.log(count + 1) / Math.log(this.base)) + 1;
@@ -167,7 +169,7 @@ export class Inserter {
 
     // If the most significant digit of delta is less than cutoff we use two
     // digits of precision instead of one to ensure that gaps between
-    // consecutive indicies are reasonably close to each other.
+    // consecutive positions are reasonably close to each other.
     const output_len =
       calculation_len -
       delta_array.length +

@@ -1,11 +1,11 @@
 {
-  "name": "rational-ordering",
+  "name": "@altmeta.org/reposition",
   "version": "1.0.0",
-  "description": "Computes sparse positions to maintain list ordering with (hopefully) minimal position edits during insert operations.",
+  "description": "Library for calculation of efficient position values of user reordered lists",
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
   "module": "build/module/index.js",
-  "repository": "https://github.com/zandaleph/rational-ordering",
+  "repository": "https://github.com/altmeta-org/reposition",
   "license": "MIT",
   "keywords": [],
   "scripts": {
@@ -47,6 +47,12 @@
   "devDependencies": {
     "@ava/typescript": "1.1.1",
     "@istanbuljs/nyc-config-typescript": "1.0.1",
+    "@semantic-release/changelog": "^5.0.1",
+    "@semantic-release/commit-analyzer": "^8.0.1",
+    "@semantic-release/git": "^9.0.0",
+    "@semantic-release/github": "^7.2.1",
+    "@semantic-release/npm": "^7.1.1",
+    "@semantic-release/release-notes-generator": "^9.0.2",
     "@typescript-eslint/eslint-plugin": "4.22.0",
     "@typescript-eslint/parser": "4.22.0",
     "ava": "3.15.0",
@@ -64,11 +70,13 @@
     "nyc": "15.1.0",
     "open-cli": "6.0.1",
     "prettier": "2.2.1",
+    "semantic-release": "^17.4.2",
     "standard-version": "9.2.0",
     "ts-node": "9.1.1",
     "typedoc": "0.20.35",
     "typescript": "4.2.4"
   },
+  "private": true,
   "files": [
     "build/main",
     "build/module",
@@ -103,5 +111,21 @@
     "exclude": [
       "**/*.spec.js"
     ]
+  },
+  "release": {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      ["@semantic-release/npm", {
+        "tarballDir": "release"
+      }],
+      ["@semantic-release/github", {
+        "assets": "release/*.tgz"
+      }],
+      "@semantic-release/git"
+    ],
+    "preset": "angular",
+    "branches": ["main"]
   }
 }

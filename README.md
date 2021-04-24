@@ -20,8 +20,7 @@ Non-goals are:
 # Installation
 
 This (will be) an npm package.  So, the standard `npm install` or `yarn add`
-invocations should apply.  TODO: update this section when I publish.
-
+invocations should apply.  TODO(#16): update this section when I publish.
 # Usage
 
 WARNING: This package is currently under development and I'm not sure I love
@@ -31,21 +30,21 @@ migration should be pretty straightforward.
 
 ```javascript
 
-import { Inserter, LIST_HEAD, LIST_TAIL } from 'rational-index';
+import { Positioner, LIST_HEAD, LIST_TAIL } from '@altmeta.org/positioner';
 
-const inserter = new Inserter();
+const positioner = new Positioner();
 
 // Create a first entry
-const [first] = inserter.insert(LIST_HEAD, LIST_TAIL);
+const [first] = positioner.insert(LIST_HEAD, LIST_TAIL);
 
 // Insert before the first entry
-const [zeroth] = inserter.insert(LIST_HEAD, first);
+const [zeroth] = positioner.insert(LIST_HEAD, first);
 
 // Insert three items after the first
-const [second, third, fourth] = inserter.insert(first, LIST_TAIL, 3);
+const [second, third, fourth] = positioner.insert(first, LIST_TAIL, 3);
 
 // Insert between first and second
-const [three_halves_th] = inserter.insert(first, second);
+const [three_halves_th] = positioner.insert(first, second);
 ```
 
 

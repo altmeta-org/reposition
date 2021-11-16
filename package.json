@@ -45,7 +45,7 @@
     "big-integer": "1.6.50"
   },
   "devDependencies": {
-    "@ava/typescript": "1.1.1",
+    "@ava/typescript": "3.0.1",
     "@istanbuljs/nyc-config-typescript": "1.0.1",
     "@semantic-release/changelog": "5.0.1",
     "@semantic-release/commit-analyzer": "8.0.1",
